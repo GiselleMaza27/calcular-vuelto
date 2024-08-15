@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vuelto</title>
+</head>
+<body>
+    <h1>Calculadora de Vuelto</h1>
+    <form id="payment-form">
+        <div>
+            <label for="product">Ingrese el precio del producto (separado por comas):</label>
+            <input type="text" id="product" placeholder="Ej: 50,30,20" required>
+        </div>
+        <div>
+            <label for="bill">Ingrese el monto con el que paga:</label>
+            <input type="number" id="bill" placeholder="Ej: 100" required>
+        </div>
+        <button type="submit">Calcular Vuelto</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Obtener los valores de los campos
+            const productInput = document.getElementById('product').value;
+            const billInput = parseFloat(document.getElementById('bill').value);
+
+            // Convertir la lista de precios en un array de números
+            const prices = productInput.split(',').map(price => parseFloat(price.trim()));
+            
+            // Calcular el total de la compra
+            const total = prices.reduce((sum, price) => sum + price, 0);
+            
+            // Calcular el vuelto
+            const change = billInput - total;
+            
+            // Mostrar el resultado
+            const resultDiv = document.getElementById('result');
+            if (change < 0) {
+                resultDiv.innerHTML = `<p>No es suficiente dinero. Falta ${Math.abs(change).toFixed(2)} unidades.</p>`;
+            } else {
+                resultDiv.innerHTML = `<p>Total de la compra: ${total.toFixed(2)}</p>
+                                       <p>Pago recibido: ${billInput.toFixed(2)}</p>
+                                       <p>Vuelto: ${change.toFixed(2)}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
